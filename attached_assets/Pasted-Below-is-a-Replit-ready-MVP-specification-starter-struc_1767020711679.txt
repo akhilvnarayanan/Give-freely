@@ -1,0 +1,283 @@
+Below is a **Replit-ready MVP specification + starter structure** so you can **directly create a Replit project and start coding**.
+This is written as a **README + implementation guide** suitable for Replit.
+
+---
+
+# Free Community Item Sharing App – MVP (Replit)
+
+## 1. Goal
+
+Build a web-based MVP that allows users to **give items away for free** to nearby community members.
+No payments. Community-driven reuse.
+
+---
+
+## 2. Tech Stack (Replit Friendly)
+
+**Recommended**
+
+* **Frontend**: HTML + CSS + Vanilla JS (or React if you prefer)
+* **Backend**: Node.js + Express
+* **Database**: SQLite (simple, file-based, Replit-friendly)
+* **Auth**: Email + password (bcrypt)
+* **Realtime Chat**: Socket.IO (optional in MVP)
+* **Image Upload**: Multer (local storage for MVP)
+
+> This avoids external services and works fully inside Replit.
+
+---
+
+## 3. Replit Project Structure
+
+```
+free-share-app/
+│
+├── server.js
+├── package.json
+├── db.sqlite
+├── /routes
+│   ├── auth.js
+│   ├── users.js
+│   ├── items.js
+│   ├── requests.js
+│   └── chat.js
+│
+├── /models
+│   ├── db.js
+│   ├── user.js
+│   ├── item.js
+│   ├── request.js
+│   └── message.js
+│
+├── /public
+│   ├── index.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── item.html
+│   ├── styles.css
+│   └── app.js
+│
+├── /uploads
+│
+└── README.md
+```
+
+---
+
+## 4. Core Features (MVP Only)
+
+### 4.1 Authentication
+
+* Register (email + password)
+* Login / logout
+* Session-based auth
+
+---
+
+### 4.2 User Profile
+
+* Name
+* Location (area only)
+* Reputation score (auto)
+* Items given / received count
+
+---
+
+### 4.3 Item Listing (Free Only)
+
+Fields:
+
+* Title
+* Description
+* Category
+* Condition
+* Location
+* Images (1–3)
+* Status: `available | reserved | given`
+
+Rules:
+
+* No price field
+* Only owner can edit/delete
+* Default status = `available`
+
+---
+
+### 4.4 Browse & Search
+
+* List all available items
+* Filter by category
+* Search by keyword
+* Sort by newest
+
+---
+
+### 4.5 Request Item
+
+* “Request Item” button
+* Optional message
+* Giver sees list of requesters
+* Giver selects one requester
+
+---
+
+### 4.6 Chat (Basic)
+
+* One-to-one chat per request
+* Text only
+* Enabled after request is sent
+
+---
+
+### 4.7 Completion Flow
+
+* Giver marks item as “given”
+* Receiver optionally confirms
+* Reputation updated automatically
+* Item removed from feed
+
+---
+
+## 5. Database Schema (SQLite)
+
+### users
+
+```sql
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  email TEXT UNIQUE,
+  password TEXT,
+  location TEXT,
+  reputation INTEGER DEFAULT 0,
+  given_count INTEGER DEFAULT 0,
+  received_count INTEGER DEFAULT 0
+);
+```
+
+### items
+
+```sql
+CREATE TABLE items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  title TEXT,
+  description TEXT,
+  category TEXT,
+  condition TEXT,
+  location TEXT,
+  status TEXT DEFAULT 'available',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### requests
+
+```sql
+CREATE TABLE requests (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  item_id INTEGER,
+  requester_id INTEGER,
+  message TEXT,
+  status TEXT DEFAULT 'pending'
+);
+```
+
+### messages
+
+```sql
+CREATE TABLE messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  request_id INTEGER,
+  sender_id INTEGER,
+  message TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## 6. API Endpoints (Minimal)
+
+### Auth
+
+* `POST /auth/register`
+* `POST /auth/login`
+* `POST /auth/logout`
+
+### Items
+
+* `POST /items`
+* `GET /items`
+* `GET /items/:id`
+* `PUT /items/:id/status`
+
+### Requests
+
+* `POST /requests`
+* `GET /requests/item/:itemId`
+* `PUT /requests/:id`
+
+### Chat
+
+* `GET /messages/:requestId`
+* `POST /messages`
+
+---
+
+## 7. Replit Setup Steps
+
+1. Create a new **Node.js Replit**
+2. Add dependencies:
+
+```
+npm install express sqlite3 bcrypt express-session multer
+```
+
+3. Create `server.js`
+4. Serve `/public` as static frontend
+5. Use SQLite file `db.sqlite`
+6. Run using:
+
+```
+node server.js
+```
+
+---
+
+## 8. MVP Restrictions (Do Not Build Yet)
+
+* Payments
+* Delivery / shipping
+* Push notifications
+* Ads
+* AI features
+* Social feed
+* Group chat
+
+---
+
+## 9. MVP Success Criteria
+
+* User can post an item in < 2 minutes
+* Item can be requested and marked given
+* Chat works reliably
+* No money flow involved
+
+---
+
+## 10. One-Line Build Definition
+
+> A Replit-hosted web app where users give items away for free, connect locally, and build a reuse community.
+
+---
+
+### Next I can generate for you:
+
+* `server.js` starter code (copy-paste ready)
+* Full REST API code
+* Simple HTML UI templates
+* Abuse prevention rules
+* Convert this to **mobile app later**
+
+Tell me **what file you want first**.
