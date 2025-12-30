@@ -7,6 +7,7 @@ import { promisify } from "util";
 import { storage } from "./storage";
 import { User } from "@shared/schema";
 import { z } from "zod";
+import { registerSchema } from "@shared/routes";
 import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 
@@ -54,17 +55,6 @@ export function setupAuth(app: Express) {
   app.use(session(sessionSettings));
   app.use(passport.initialize());
   app.use(passport.session());
-
-  const registerSchema = z.object({
-    username: z.string().min(3),
-    password: z.string().min(8),
-    name: z.string().min(1),
-    email: z.string().email().optional(),
-    phoneNumber: z.string().optional(),
-    location: z.string().optional(),
-    phonePublic: z.boolean().optional(),
-    emailPublic: z.boolean().optional(),
-  });
 
   const loginSchema = z.object({
     username: z.string().min(1),
