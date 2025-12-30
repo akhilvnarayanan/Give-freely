@@ -144,14 +144,16 @@ if (process.env.RUN_AS_SERVER !== "false") {
   (async () => {
     const { httpServer } = await createApp();
     const port = parseInt(process.env.PORT || "5000", 10);
+    // Use 127.0.0.1 for localhost access; 0.0.0.0 for Docker/cloud deployment
+    const host = process.env.SERVER_HOST || "127.0.0.1";
     httpServer.listen(
       {
         port,
-        host: "0.0.0.0",
+        host,
         reusePort: true,
       },
       () => {
-        log(`serving on port ${port}`);
+        log(`serving on http://${host}:${port}`);
       },
     );
   })();
