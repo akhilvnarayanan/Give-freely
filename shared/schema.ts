@@ -53,6 +53,13 @@ export const messages = pgTable("messages", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Session table for express-session with connect-pg-simple
+export const session = pgTable("session", {
+  sid: text("sid").primaryKey(),
+  sess: jsonb("sess").$type<Record<string, any>>().notNull(),
+  expire: timestamp("expire").notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   items: many(items),
