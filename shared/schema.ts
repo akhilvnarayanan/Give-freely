@@ -19,6 +19,8 @@ export const users = pgTable("users", {
   emailVerified: boolean("email_verified").default(false),
   verificationCode: text("verification_code"),
   verificationCodeExpires: timestamp("verification_code_expires"),
+  passwordResetToken: text("password_reset_token"),
+  passwordResetExpires: timestamp("password_reset_expires"),
 });
 
 export const items = pgTable("items", {
@@ -95,6 +97,7 @@ export const insertUserSchema = createInsertSchema(users).omit({
   reputation: true, 
   givenCount: true, 
   receivedCount: true 
+  , passwordResetToken: true, passwordResetExpires: true
 });
 
 export const insertItemSchema = createInsertSchema(items).omit({ 

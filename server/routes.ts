@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import csurf from "csurf";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
@@ -10,6 +11,21 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
   setupAuth(app);
+
+  // csrf protection - requires session middleware from setupAuth
+  const csrfProtection = csurf();
+
+  // expose a token endpoint clients can call after session established
+  app.get("/api/csrf-token", (req, res) => {
+    try {
+      // ensure a token is available (csurf will create one on req)
+      csrfProtection(req as any, res as any, () => {
+        res.json({ csrfToken: (req as any).csrfToken() });
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Failed to generate CSRF token" });
+    }
+  });
 
   app.get(api.items.list.path, async (req, res) => {
     const items = await storage.getItems({
