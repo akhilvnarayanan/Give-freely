@@ -113,8 +113,15 @@ export async function registerRoutes(
 
   app.patch("/api/user/profile", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
-    const { name, location } = req.body;
-    const updated = await storage.updateUserProfile(req.user.id, { name, location });
+    const { name, location, phoneNumber, email, phonePublic, emailPublic } = req.body;
+    const updated = await storage.updateUserProfile(req.user.id, { 
+      name, 
+      location, 
+      phoneNumber, 
+      email, 
+      phonePublic, 
+      emailPublic 
+    });
     res.json(updated);
   });
 
